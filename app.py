@@ -5,20 +5,34 @@ import os
 
 app = Flask(__name__)
 app.secret_key = "secret_key_for_session"  # Required for session management
-def record_visit():
-    conn = sqlite3.connect('visit_counter.db')
-    c = conn.cursor()
-    c.execute("INSERT INTO visits (timestamp) VALUES (CURRENT_TIMESTAMP)")
+# Initialize the SQLite database (if it doesn't exist)
+def visit_db():
+    conn = sqlite3.connect('visitor_count.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS visitors (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            count INTEGER
+        )
+    ''')
+    # Initialize count if it's the first time
+    cursor.execute('SELECT count FROM visitors WHERE id = 1')
+    result = cursor.fetchone()
+    if not result:
+        cursor.execute('INSERT INTO visitors (count) VALUES (0)')
     conn.commit()
     conn.close()
-def count_visits():
-    conn = sqlite3.connect('visit_counter.db')
-    c = conn.cursor()
-    c.execute("SELECT COUNT(*) FROM visits")
-    count = c.fetchone()[0]
+
+# Function to increment and retrieve visitor count
+def get_visitor_count():
+    conn = sqlite3.connect('visitor_count.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT count FROM visitors WHERE id = 1')
+    count = cursor.fetchone()[0]
+    cursor.execute('UPDATE visitors SET count = count + 1 WHERE id = 1')
+    conn.commit()
     conn.close()
     return count
-    
 # Initialize DB
 def init_db():
     conn = sqlite3.connect('votes.db')
@@ -82,11 +96,6 @@ def home():
         })
 
     return render_template('index.html', actors=actors)
-@app.route('/visitor-count')
-def visitor_count():
-    count = count_visits()
-    return f"Total visitors: {count}"
-
 
 @app.route('/vote/<actor_name>', methods=['POST'])
 def vote(actor_name):
@@ -158,4 +167,5 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
+    visit_db()
     app.run(debug=True)
