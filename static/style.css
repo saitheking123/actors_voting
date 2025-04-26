@@ -56,3 +56,36 @@ button {
 button:hover {
     background: #444;
 }
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .actor-container {
+        padding: 10px;
+    }
+
+    .actor-card {
+        width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h5 {
+        font-size: 0.9rem;
+    }
+
+    .actor-card {
+        width: 150px;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+}
