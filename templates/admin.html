@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Actor Votes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .actor-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .actor {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            width: 220px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .actor img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .action-buttons {
+            margin-top: 10px;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        input[type="file"] {
+            margin-top: 10px;
+        }
+        .edit-actions {
+            display: none;
+            margin-top: 10px;
+        }
+        .edit-actions.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin - Actor Voting Management</h1>
+    
+    <div class="actor-list">
+        {% for actor in images %}
+        <div class="actor">
+            <h3>{{ actor.split('.')[0] }}</h3>
+            <img src="{{ url_for('static', filename='images/' + actor) }}" alt="{{ actor }}">
+            <p>{{ votes.get(actor.split('.')[0], 0) }} votes</p>
+
+            <!-- Edit and Delete Actions -->
+            <form method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="actor_name" value="{{ actor.split('.')[0] }}">
+
+                <div class="action-buttons">
+                    <!-- Toggle Edit Actions -->
+                    <button type="button" class="edit-toggle-btn" data-actor="{{ actor.split('.')[0] }}">Edit</button>
+                    
+                    <!-- Delete Button -->
+                    <button type="submit" name="action" value="delete" style="background-color: red;">Delete</button>
+                </div>
+
+                <!-- Edit Actions (Replace Image & Edit Name) -->
+                <div class="edit-actions" id="edit-actions-{{ actor.split('.')[0] }}">
+                    <!-- Edit Name -->
+                    <input type="text" name="new_name" placeholder="New name" required>
+                    <button type="submit" name="action" value="edit">Edit Name</button>
+
+                    <!-- Replace Image -->
+                    <input type="file" name="new_image" accept="image/*">
+                    <button type="submit" name="action" value="replace_image">Replace Image</button>
+                </div>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+    <br>
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+    <script>
+        // Toggle edit actions when the "Edit" button is clicked
+        document.querySelectorAll('.edit-toggle-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                var actorName = this.getAttribute('data-actor');
+                var editActions = document.getElementById('edit-actions-' + actorName);
+
+                // Toggle the visibility of edit actions (Replace Image & Edit Name)
+                editActions.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

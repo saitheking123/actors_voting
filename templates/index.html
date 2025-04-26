@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vote Your Actor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Vote for Your Favorite Star 🌟</h1>
+    <h5>this vote end today(26.04.25) at 5.00pm vote here enjoy here,<br>result will be announced at 5.10pm </h5>
+    <div class="actor-container">
+        {% for actor in actors %}
+        <div class="actor-card">
+            <img src="{{ url_for('static', filename='images/' + actor.image) }}" alt="{{ actor.name }}">
+            <h2>{{ actor.name }}</h2>
+            <form action="/vote/{{ actor.name }}" method="POST">
+                <button type="submit">Vote</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
