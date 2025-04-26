@@ -1,3 +1,4 @@
+/* Global Styles */
 body {
     font-family: 'Poppins', sans-serif;
     background: #f9f9f9;
@@ -16,15 +17,18 @@ h1 {
     justify-content: center;
     gap: 40px;
     flex-wrap: wrap;
+    padding: 20px;
 }
 
+/* Actor Cards */
 .actor-card {
     background: white;
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     width: 250px;
     transition: transform 0.3s;
+    margin-bottom: 20px;
 }
 
 .actor-card:hover {
@@ -56,36 +60,56 @@ button {
 button:hover {
     background: #444;
 }
-/* Mobile Responsiveness */
+
+/* Mobile Responsive Styles */
 @media (max-width: 768px) {
     h1 {
         font-size: 2rem;
+        margin-bottom: 20px;
     }
 
     .actor-container {
+        gap: 20px;
         padding: 10px;
     }
 
     .actor-card {
         width: 200px;
+        padding: 15px;
+    }
+
+    .actor-card img {
+        height: 200px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 8px 16px;
     }
 }
 
+/* Very Small Screens (Mobile devices under 480px) */
 @media (max-width: 480px) {
     h1 {
         font-size: 1.5rem;
     }
 
-    h5 {
-        font-size: 0.9rem;
+    .actor-container {
+        gap: 15px;
+        padding: 5px;
     }
 
     .actor-card {
         width: 150px;
+        padding: 12px;
+    }
+
+    .actor-card img {
+        height: 180px;
     }
 
     button {
-        font-size: 0.9rem;
-        padding: 8px 15px;
+        font-size: 14px;
+        padding: 8px 16px;
     }
 }
