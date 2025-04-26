@@ -5,6 +5,20 @@ import os
 
 app = Flask(__name__)
 app.secret_key = "secret_key_for_session"  # Required for session management
+def record_visit():
+    conn = sqlite3.connect('visit_counter.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO visits (timestamp) VALUES (CURRENT_TIMESTAMP)")
+    conn.commit()
+    conn.close()
+def count_visits():
+    conn = sqlite3.connect('visit_counter.db')
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM visits")
+    count = c.fetchone()[0]
+    conn.close()
+    return count
+    
 # Initialize DB
 def init_db():
     conn = sqlite3.connect('votes.db')
@@ -68,6 +82,11 @@ def home():
         })
 
     return render_template('index.html', actors=actors)
+@app.route('/visitor-count')
+def visitor_count():
+    count = count_visits()
+    return f"Total visitors: {count}"
+
 
 @app.route('/vote/<actor_name>', methods=['POST'])
 def vote(actor_name):
